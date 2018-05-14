@@ -34,8 +34,7 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && cd ~/.vim/bundle \
   && git clone --depth 1 https://github.com/tpope/vim-sensible \
   && git clone --depth 1 https://github.com/scrooloose/nerdtree \
-  && git clone --depth 1 https://github.com/vim-syntastic/syntastic \
-  && git clone --depth 1 https://github.com/xojs/vim-xo \
+  && git clone --depth 1 https://github.com/w0rp/ale \
   && git clone --depth 1 https://github.com/pangloss/vim-javascript \
   && git clone --depth 1 https://github.com/mxw/vim-jsx \
   && git clone --depth 1 https://github.com/posva/vim-vue \
@@ -54,9 +53,11 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "" >> .vimrc \
   && echo "map <C-n> :NERDTreeToggle<CR>" >> .vimrc \
   && echo "" >> .vimrc \
-  && echo "let g:syntastic_javascript_checkers = ['xo']" >> .vimrc \
-  && echo "let g:syntastic_javascript_xo_args = ['--fix']" >> .vimrc \
-  && echo "au VimEnter *.js au BufWritePost *.js checktime" >> .vimrc \
+  && echo "let g:ale_linters= {}" >> .vimrc \
+  && echo "let g:ale_linters['javascript'] = ['xo']" >> .vimrc \
+  && echo "let g:ale_fixers = {}" >> .vimrc \
+  && echo "let g:ale_fixers['javascript'] = ['xo']" >> .vimrc \
+  && echo "let g:ale_fix_on_save = 1" >> .vimrc \
   && git config --global user.name "$USER_FULLNAME" \
   && git config --global push.default simple \
   && git config --global credential.helper cache
