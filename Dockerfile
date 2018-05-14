@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu
 
 ARG UID=1000
 ARG USERNAME=bakerface
