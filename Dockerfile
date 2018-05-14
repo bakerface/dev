@@ -33,6 +33,7 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim \
   && cd ~/.vim/bundle \
   && git clone --depth 1 https://github.com/tpope/vim-sensible \
+  && git clone --depth 1 https://github.com/scrooloose/nerdtree \
   && git clone --depth 1 https://github.com/vim-syntastic/syntastic \
   && git clone --depth 1 https://github.com/xojs/vim-xo \
   && git clone --depth 1 https://github.com/pangloss/vim-javascript \
@@ -42,6 +43,7 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "execute pathogen#infect()" > .vimrc \
   && echo "syntax on" >> .vimrc \
   && echo "filetype plugin indent on" >> .vimrc \
+  && echo "set enc=utf-8" >> .vimrc \
   && echo "set tabstop=2" >> .vimrc \
   && echo "set softtabstop=2" >> .vimrc \
   && echo "set shiftwidth=2" >> .vimrc \
@@ -49,6 +51,8 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "set number" >> .vimrc \
   && echo "set autoread" >> .vimrc \
   && echo "inoremap jk <Esc>" >> .vimrc \
+  && echo "" >> .vimrc \
+  && echo "map <C-n> :NERDTreeToggle<CR>" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "let g:syntastic_javascript_checkers = ['xo']" >> .vimrc \
   && echo "let g:syntastic_javascript_xo_args = ['--fix']" >> .vimrc \
