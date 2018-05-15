@@ -51,13 +51,15 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "set autoread" >> .vimrc \
   && echo "inoremap jk <Esc>" >> .vimrc \
   && echo "" >> .vimrc \
-  && echo "map <C-n> :NERDTreeToggle<CR>" >> .vimrc \
-  && echo "" >> .vimrc \
   && echo "let g:ale_linters= {}" >> .vimrc \
   && echo "let g:ale_linters['javascript'] = ['xo']" >> .vimrc \
   && echo "let g:ale_fixers = {}" >> .vimrc \
   && echo "let g:ale_fixers['javascript'] = ['xo']" >> .vimrc \
   && echo "let g:ale_fix_on_save = 1" >> .vimrc \
+  && echo "" >> .vimrc \
+  && echo "map <C-n> :NERDTreeToggle<cr>" >> .vimrc \
+  && echo "nmap <silent> <C-j> :ALENext<cr>" >> .vimrc \
+  && echo "nmap <silent> <C-k> :ALEPrevious<cr>" >> .vimrc \
   && git config --global user.name "$USER_FULLNAME" \
   && git config --global push.default simple \
   && git config --global credential.helper cache
