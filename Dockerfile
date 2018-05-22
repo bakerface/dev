@@ -38,6 +38,7 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && git clone --depth 1 https://github.com/pangloss/vim-javascript \
   && git clone --depth 1 https://github.com/mxw/vim-jsx \
   && git clone --depth 1 https://github.com/posva/vim-vue \
+  && git clone --depth 1 https://github.com/elmcast/elm-vim \
   && cd ~ \
   && echo "execute pathogen#infect()" > .vimrc \
   && echo "syntax on" >> .vimrc \
