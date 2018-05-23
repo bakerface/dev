@@ -33,6 +33,8 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim \
   && cd ~/.vim/bundle \
   && git clone --depth 1 https://github.com/tpope/vim-sensible \
+  && git clone --depth 1 https://github.com/tpope/vim-fugitive \
+  && git clone --depth 1 https://github.com/vim-airline/vim-airline \
   && git clone --depth 1 https://github.com/scrooloose/nerdtree \
   && git clone --depth 1 https://github.com/w0rp/ale \
   && git clone --depth 1 https://github.com/pangloss/vim-javascript \
