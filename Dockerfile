@@ -53,9 +53,9 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "inoremap jk <Esc>" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "let g:ale_linters= {}" >> .vimrc \
-  && echo "let g:ale_linters['javascript'] = ['xo']" >> .vimrc \
+  && echo "let g:ale_linters['javascript'] = ['xo', 'eslint']" >> .vimrc \
   && echo "let g:ale_fixers = {}" >> .vimrc \
-  && echo "let g:ale_fixers['javascript'] = ['xo']" >> .vimrc \
+  && echo "let g:ale_fixers['javascript'] = ['xo', 'eslint']" >> .vimrc \
   && echo "let g:ale_fix_on_save = 1" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "map <C-n> :NERDTreeToggle<cr>" >> .vimrc \
