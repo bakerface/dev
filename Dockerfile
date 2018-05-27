@@ -32,6 +32,7 @@ ENV EDITOR=vim VISUAL=vim TERM=xterm-256color
 RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim \
   && cd ~/.vim/bundle \
+  && git clone --depth 1 https://github.com/soywod/vim-keepeye \
   && git clone --depth 1 https://github.com/tpope/vim-sensible \
   && git clone --depth 1 https://github.com/tpope/vim-fugitive \
   && git clone --depth 1 https://github.com/vim-airline/vim-airline \
@@ -45,6 +46,7 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "execute pathogen#infect()" > .vimrc \
   && echo "syntax on" >> .vimrc \
   && echo "filetype plugin indent on" >> .vimrc \
+  && echo "" >> .vimrc \
   && echo "set enc=utf-8" >> .vimrc \
   && echo "set tabstop=2" >> .vimrc \
   && echo "set softtabstop=2" >> .vimrc \
@@ -52,14 +54,16 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "set expandtab" >> .vimrc \
   && echo "set number" >> .vimrc \
   && echo "set autoread" >> .vimrc \
-  && echo "inoremap jk <Esc>" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "let g:ale_linters= {}" >> .vimrc \
+  && echo "let g:ale_linters['css'] = ['stylelint']" >> .vimrc \
   && echo "let g:ale_linters['javascript'] = ['xo', 'eslint']" >> .vimrc \
   && echo "let g:ale_fixers = {}" >> .vimrc \
+  && echo "let g:ale_fixers['css'] = ['stylelint']" >> .vimrc \
   && echo "let g:ale_fixers['javascript'] = ['xo', 'eslint']" >> .vimrc \
   && echo "let g:ale_fix_on_save = 1" >> .vimrc \
   && echo "" >> .vimrc \
+  && echo "inoremap jk <Esc>" >> .vimrc \
   && echo "map <C-n> :NERDTreeToggle<cr>" >> .vimrc \
   && echo "nmap <silent> <C-j> :ALENext<cr>" >> .vimrc \
   && echo "nmap <silent> <C-k> :ALEPrevious<cr>" >> .vimrc \
