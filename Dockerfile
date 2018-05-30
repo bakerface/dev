@@ -39,6 +39,7 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && git clone --depth 1 https://github.com/mxw/vim-jsx \
   && git clone --depth 1 https://github.com/pangloss/vim-javascript \
   && git clone --depth 1 https://github.com/posva/vim-vue \
+  && git clone --depth 1 https://github.com/quramy/tsuquyomi.git \
   && git clone --depth 1 https://github.com/quramy/vim-dtsm \
   && git clone --depth 1 https://github.com/quramy/vim-js-pretty-template \
   && git clone --depth 1 https://github.com/tpope/vim-fugitive \
