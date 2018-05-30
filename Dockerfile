@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y autoconf build-essential curl git make 
   && curl -fsSL $DOCKER_URL | sudo tar --strip-components=1 -C /usr/local/bin -xz \
   && curl -fsSL -o /usr/local/bin/docker-compose $DOCKER_COMPOSE_URL \
   && chmod +x /usr/local/bin/docker-compose \
+  && npm install -g typescript \
   && cd /usr/local/bin \
   && echo "#!/usr/bin/env bash" > git-email \
   && echo 'NAME=$(git config user.name)' >> git-email \
@@ -31,14 +32,19 @@ ENV EDITOR=vim VISUAL=vim TERM=xterm-256color
 RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim \
   && cd ~/.vim/bundle \
-  && git clone --depth 1 https://github.com/tpope/vim-sensible \
+  && git clone --depth 1 https://github.com/elmcast/elm-vim \
+  && git clone --depth 1 https://github.com/jason0x43/vim-js-indent \
+  && git clone --depth 1 https://github.com/leafgarland/typescript-vim \
+  && git clone --depth 1 https://github.com/mhartington/vim-typings \
+  && git clone --depth 1 https://github.com/mxw/vim-jsx \
+  && git clone --depth 1 https://github.com/pangloss/vim-javascript \
+  && git clone --depth 1 https://github.com/posva/vim-vue \
+  && git clone --depth 1 https://github.com/quramy/vim-dtsm \
+  && git clone --depth 1 https://github.com/quramy/vim-js-pretty-template \
   && git clone --depth 1 https://github.com/tpope/vim-fugitive \
+  && git clone --depth 1 https://github.com/tpope/vim-sensible \
   && git clone --depth 1 https://github.com/vim-airline/vim-airline \
   && git clone --depth 1 https://github.com/w0rp/ale \
-  && git clone --depth 1 https://github.com/pangloss/vim-javascript \
-  && git clone --depth 1 https://github.com/mxw/vim-jsx \
-  && git clone --depth 1 https://github.com/posva/vim-vue \
-  && git clone --depth 1 https://github.com/elmcast/elm-vim \
   && cd ~ \
   && echo "execute pathogen#infect()" > .vimrc \
   && echo "syntax on" >> .vimrc \
