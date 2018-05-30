@@ -4,14 +4,13 @@ ARG UID=1000
 ARG USERNAME=bakerface
 ARG USER_FULLNAME="Chris Baker"
 ARG NODE_URL=https://deb.nodesource.com/setup_10.x
-ARG DOCKER_URL=https://download.docker.com/linux/static/edge/x86_64/docker-18.03.0-ce.tgz
-ARG DOCKER_COMPOSE_URL=https://github.com/docker/compose/releases/download/1.21.0/docker-compose-Linux-x86_64
+ARG DOCKER_URL=https://download.docker.com/linux/static/stable/x86_64/docker-18.03.1-ce.tgz
+ARG DOCKER_COMPOSE_URL=https://github.com/docker/compose/releases/download/1.21.2/docker-compose-Linux-x86_64
 
-RUN apt-get update && apt-get install -y autoconf build-essential curl git make sudo tree vim \
+RUN apt-get update && apt-get install -y autoconf build-essential curl git make openssh-client sudo tree vim \
   && curl -fsSL $NODE_URL | bash - \
   && apt-get install -y nodejs \
-  && curl -fsSL $DOCKER_URL \
-     | sudo tar --strip-components=1 -C /usr/local/bin -xz \
+  && curl -fsSL $DOCKER_URL | sudo tar --strip-components=1 -C /usr/local/bin -xz \
   && curl -fsSL -o /usr/local/bin/docker-compose $DOCKER_COMPOSE_URL \
   && chmod +x /usr/local/bin/docker-compose \
   && cd /usr/local/bin \
@@ -32,11 +31,9 @@ ENV EDITOR=vim VISUAL=vim TERM=xterm-256color
 RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim \
   && cd ~/.vim/bundle \
-  && git clone --depth 1 https://github.com/soywod/vim-keepeye \
   && git clone --depth 1 https://github.com/tpope/vim-sensible \
   && git clone --depth 1 https://github.com/tpope/vim-fugitive \
   && git clone --depth 1 https://github.com/vim-airline/vim-airline \
-  && git clone --depth 1 https://github.com/scrooloose/nerdtree \
   && git clone --depth 1 https://github.com/w0rp/ale \
   && git clone --depth 1 https://github.com/pangloss/vim-javascript \
   && git clone --depth 1 https://github.com/mxw/vim-jsx \
@@ -76,7 +73,6 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "\}" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "inoremap jk <Esc>" >> .vimrc \
-  && echo "map <C-n> :NERDTreeToggle<cr>" >> .vimrc \
   && echo "nmap <silent> <C-j> :ALENext<cr>" >> .vimrc \
   && echo "nmap <silent> <C-k> :ALEPrevious<cr>" >> .vimrc \
   && git config --global user.name "$USER_FULLNAME" \
