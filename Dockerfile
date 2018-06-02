@@ -16,8 +16,10 @@ RUN apt-get update && apt-get install -y autoconf build-essential curl git make 
   && npm install -g typescript \
   && cd /usr/local/bin \
   && echo "#!/usr/bin/env bash" > git-email \
+  && echo "" > git-email \
   && echo 'NAME=$(git config user.name)' >> git-email \
   && echo 'EMAIL=$(git log --author="$NAME" --format="%ae" -n 1)' >> git-email \
+  && echo "" > git-email \
   && echo 'git config user.email "$EMAIL"' >> git-email \
   && chmod +x git-email \
   && addgroup --gid $UID $USERNAME \
@@ -42,6 +44,7 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && git clone --depth 1 https://github.com/quramy/tsuquyomi.git \
   && git clone --depth 1 https://github.com/quramy/vim-dtsm \
   && git clone --depth 1 https://github.com/quramy/vim-js-pretty-template \
+  && git clone --depth 1 https://github.com/scrooloose/nerdtree \
   && git clone --depth 1 https://github.com/tpope/vim-fugitive \
   && git clone --depth 1 https://github.com/tpope/vim-sensible \
   && git clone --depth 1 https://github.com/vim-airline/vim-airline \
@@ -82,6 +85,7 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "inoremap jk <Esc>" >> .vimrc \
   && echo "nmap <silent> <C-j> :ALENext<cr>" >> .vimrc \
   && echo "nmap <silent> <C-k> :ALEPrevious<cr>" >> .vimrc \
+  && echo "map <C-n> :NERDTreeToggle<cr>" >> .vimrc \
   && git config --global user.name "$USER_FULLNAME" \
   && git config --global push.default simple \
   && git config --global credential.helper cache
