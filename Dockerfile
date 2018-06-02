@@ -16,11 +16,19 @@ RUN apt-get update && apt-get install -y autoconf build-essential curl git make 
   && npm install -g typescript \
   && cd /usr/local/bin \
   && echo "#!/usr/bin/env bash" > git-email \
-  && echo "" > git-email \
+  && echo "" >> git-email \
   && echo 'NAME=$(git config user.name)' >> git-email \
   && echo 'EMAIL=$(git log --author="$NAME" --format="%ae" -n 1)' >> git-email \
-  && echo "" > git-email \
+  && echo "" >> git-email \
+  && echo 'if [ -z "$EMAIL" ]; then' >> git-email \
+  && echo '  echo Could not find an email associated with name \\"$NAME\\"' >> git-email \
+  && echo "  exit 1" >> git-email \
+  && echo "fi" >> git-email \
+  && echo "" >> git-email \
   && echo 'git config user.email "$EMAIL"' >> git-email \
+  && echo "" >> git-email \
+  && echo 'echo Using \\"$EMAIL\\" for git commits in this repository' >> git-email \
+  && echo "exit 0" >> git-email \
   && chmod +x git-email \
   && addgroup --gid $UID $USERNAME \
   && adduser --uid $UID --gid $UID --shell /bin/bash --disabled-password --gecos "" $USERNAME \
