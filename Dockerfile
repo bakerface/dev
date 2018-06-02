@@ -90,4 +90,4 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && git config --global push.default simple \
   && git config --global credential.helper cache
 
-ENTRYPOINT sudo chmod 777 /var/run/docker.sock && bash
+ENTRYPOINT ["bash"]
