@@ -7,7 +7,7 @@ ARG NODE_URL=https://deb.nodesource.com/setup_10.x
 ARG DOCKER_URL=https://download.docker.com/linux/static/stable/x86_64/docker-18.03.1-ce.tgz
 ARG DOCKER_COMPOSE_URL=https://github.com/docker/compose/releases/download/1.21.2/docker-compose-Linux-x86_64
 
-RUN apt-get update && apt-get install -y autoconf build-essential curl git make openssh-client sudo tree vim \
+RUN apt-get update && apt-get install -y autoconf build-essential curl git iputils-ping make openssh-client sudo tree vim \
   && curl -fsSL $NODE_URL | bash - \
   && apt-get install -y nodejs \
   && curl -fsSL $DOCKER_URL | sudo tar --strip-components=1 -C /usr/local/bin -xz \
@@ -70,7 +70,7 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "set number" >> .vimrc \
   && echo "set autoread" >> .vimrc \
   && echo "" >> .vimrc \
-  && echo "let g:ale_linters= {}" >> .vimrc \
+  && echo "let g:ale_linters = {}" >> .vimrc \
   && echo "let g:ale_fixers = {}" >> .vimrc \
   && echo "let g:ale_fix_on_save = 1" >> .vimrc \
   && echo "" >> .vimrc \
