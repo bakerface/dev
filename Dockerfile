@@ -87,6 +87,14 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "let g:ale_fixers = {}" >> .vimrc \
   && echo "let g:ale_fix_on_save = 1" >> .vimrc \
   && echo "" >> .vimrc \
+  && echo "autocmd FileType css let g:ale_linters = {" >> .vimrc \
+  && echo "\  'css': glob('.stylelintrc*', '.;') != '' ? [ 'prettier', 'stylelint' ] : []," >> .vimrc \
+  && echo "\}" >> .vimrc \
+  && echo "" >> .vimrc \
+  && echo "autocmd FileType css let g:ale_fixers = {" >> .vimrc \
+  && echo "\  'css': glob('.stylelintrc*', '.;') != '' ? [ 'prettier', 'stylelint' ] : []," >> .vimrc \
+  && echo "\}" >> .vimrc \
+  && echo "" >> .vimrc \
   && echo "autocmd FileType javascript let g:ale_linters = {" >> .vimrc \
   && echo "\  'javascript': glob('.eslintrc*', '.;') != '' ? [ 'prettier', 'eslint' ] : [ 'xo' ]," >> .vimrc \
   && echo "\}" >> .vimrc \
@@ -95,12 +103,12 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "\  'javascript': glob('.eslintrc*', '.;') != '' ? [ 'prettier', 'eslint' ] : [ 'xo' ]," >> .vimrc \
   && echo "\}" >> .vimrc \
   && echo "" >> .vimrc \
-  && echo "autocmd FileType css let g:ale_linters = {" >> .vimrc \
-  && echo "\  'css': glob('.stylelintrc*', '.;') != '' ? [ 'prettier', 'stylelint' ] : []," >> .vimrc \
+  && echo "autocmd FileType typescript let g:ale_linters = {" >> .vimrc \
+  && echo "\  'typescript': [ 'prettier', 'tslint' ] : [ 'xo' ]," >> .vimrc \
   && echo "\}" >> .vimrc \
   && echo "" >> .vimrc \
-  && echo "autocmd FileType css let g:ale_fixers = {" >> .vimrc \
-  && echo "\  'css': glob('.stylelintrc*', '.;') != '' ? [ 'prettier', 'stylelint' ] : []," >> .vimrc \
+  && echo "autocmd FileType typescript let g:ale_fixers = {" >> .vimrc \
+  && echo "\  'typescript': [ 'prettier', 'tslint' ] : [ 'xo' ]," >> .vimrc \
   && echo "\}" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "inoremap jk <Esc>" >> .vimrc \
