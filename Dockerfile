@@ -7,7 +7,7 @@ ARG NODE_URL=https://deb.nodesource.com/setup_10.x
 ARG DOCKER_URL=https://download.docker.com/linux/static/stable/x86_64/docker-18.03.1-ce.tgz
 ARG DOCKER_COMPOSE_URL=https://github.com/docker/compose/releases/download/1.21.2/docker-compose-Linux-x86_64
 
-RUN apt-get update && apt-get install -y autoconf build-essential curl git iputils-ping make openssh-client sudo tree vim \
+RUN apt-get update && apt-get install -y autoconf build-essential cmake curl git iputils-ping make openssh-client python-dev python3-dev sudo tree vim \
   && curl -fsSL $NODE_URL | bash - \
   && apt-get install -y nodejs \
   && curl -fsSL $DOCKER_URL | sudo tar --strip-components=1 -C /usr/local/bin -xz \
@@ -42,6 +42,8 @@ ENV EDITOR=vim VISUAL=vim TERM=xterm-256color
 RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim \
   && cd ~/.vim/bundle \
+  && git clone --depth 1 https://github.com/nanotech/jellybeans.vim \
+  && git clone --depth 1 https://github.com/Valloric/YouCompleteMe \
   && git clone --depth 1 https://github.com/elmcast/elm-vim \
   && git clone --depth 1 https://github.com/jason0x43/vim-js-indent \
   && git clone --depth 1 https://github.com/leafgarland/typescript-vim \
@@ -57,10 +59,14 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && git clone --depth 1 https://github.com/tpope/vim-sensible \
   && git clone --depth 1 https://github.com/vim-airline/vim-airline \
   && git clone --depth 1 https://github.com/w0rp/ale \
+  && cd ~/.vim/bundle/YouCompleteMe \
+  && git submodule update --init --recursive \
+  && ./install.py --clang-completer --js-completer \
   && cd ~ \
   && echo "execute pathogen#infect()" > .vimrc \
   && echo "syntax on" >> .vimrc \
   && echo "filetype plugin indent on" >> .vimrc \
+  && echo "colorscheme jellybeans" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "set enc=utf-8" >> .vimrc \
   && echo "set tabstop=2" >> .vimrc \
@@ -70,6 +76,13 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "set number" >> .vimrc \
   && echo "set autoread" >> .vimrc \
   && echo "" >> .vimrc \
+  && echo "if !exists('g:ycm_semantic_triggers')" >> .vimrc \
+  && echo "  let g:ycm_semantic_triggers = {}" >> .vimrc \
+  && echo "endif" >> .vimrc \
+  && echo "" >> .vimrc \
+  && echo "let g:ycm_semantic_triggers['javascript'] = ['.']" >> .vimrc \
+  && echo "let g:ycm_semantic_triggers['typescript'] = ['.']" >> .vimrc \
+  && echo "let g:tsuquyomi_disable_quickfix = 1" >> .vimrc \
   && echo "let g:ale_linters = {}" >> .vimrc \
   && echo "let g:ale_fixers = {}" >> .vimrc \
   && echo "let g:ale_fix_on_save = 1" >> .vimrc \
