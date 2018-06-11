@@ -43,6 +43,7 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim \
   && cd ~/.vim/bundle \
   && git clone --depth 1 https://github.com/nanotech/jellybeans.vim \
+  && git clone --depth 1 https://github.com/soywod/vim-keepeye \
   && git clone --depth 1 https://github.com/Valloric/YouCompleteMe \
   && git clone --depth 1 https://github.com/elmcast/elm-vim \
   && git clone --depth 1 https://github.com/jason0x43/vim-js-indent \
@@ -104,11 +105,11 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "\}" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "autocmd FileType typescript let g:ale_linters = {" >> .vimrc \
-  && echo "\  'typescript': [ 'prettier', 'tslint' ] : [ 'xo' ]," >> .vimrc \
+  && echo "\  'typescript': [ 'prettier', 'tslint' ]," >> .vimrc \
   && echo "\}" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "autocmd FileType typescript let g:ale_fixers = {" >> .vimrc \
-  && echo "\  'typescript': [ 'prettier', 'tslint' ] : [ 'xo' ]," >> .vimrc \
+  && echo "\  'typescript': [ 'prettier', 'tslint' ]," >> .vimrc \
   && echo "\}" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "inoremap jk <Esc>" >> .vimrc \
