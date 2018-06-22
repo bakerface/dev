@@ -84,7 +84,6 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "let g:ycm_autoclose_preview_window_after_completion = 1" >> .vimrc \
   && echo "let g:ycm_semantic_triggers['javascript'] = ['.']" >> .vimrc \
   && echo "let g:ycm_semantic_triggers['typescript'] = ['.']" >> .vimrc \
-  && echo "let g:tsuquyomi_disable_quickfix = 1" >> .vimrc \
   && echo "let g:ale_linters = {}" >> .vimrc \
   && echo "let g:ale_fixers = {}" >> .vimrc \
   && echo "let g:ale_fix_on_save = 1" >> .vimrc \
