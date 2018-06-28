@@ -30,6 +30,43 @@ RUN apt-get update && apt-get install -y autoconf build-essential cmake curl git
   && echo 'echo Using \\"$EMAIL\\" for git commits in this repository' >> git-email \
   && echo "exit 0" >> git-email \
   && chmod +x git-email \
+  && echo "#!/usr/bin/env bash" > git-c \
+  && echo "" >> git-c \
+  && echo "set -e" >> git-c \
+  && echo "" >> git-c \
+  && echo 'DOMAIN="$1"' >> git-c \
+  && echo 'ORG="$2"' >> git-c \
+  && echo 'REPO="$3"' >> git-c \
+  && echo "" >> git-c \
+  && echo 'if [ -z "$DOMAIN" ]; then' >> git-c \
+  && echo "  echo Cannot clone with empty domain" >> git-c \
+  && echo "  exit 1" >> git-c \
+  && echo "fi" >> git-c \
+  && echo "" >> git-c \
+  && echo 'if [ -z "$ORG" ]; then' >> git-c \
+  && echo "  echo Cannot clone with empty organization" >> git-c \
+  && echo "  exit 1" >> git-c \
+  && echo "fi" >> git-c \
+  && echo "" >> git-c \
+  && echo 'if [ -z "$REPO" ]; then' >> git-c \
+  && echo "  echo Cannot clone with empty repository" >> git-c \
+  && echo "  exit 1" >> git-c \
+  && echo "fi" >> git-c \
+  && echo "" >> git-c \
+  && echo 'git clone $DOMAIN/$ORG/$REPO.git' >> git-c \
+  && echo 'cd "$REPO"' >> git-c \
+  && echo 'git email' >> git-c \
+  && echo "" >> git-c \
+  && echo "exit 0" >> git-c \
+  && chmod +x git-c \
+  && echo "#!/usr/bin/env bash" > git-hub \
+  && echo "" >> git-hub \
+  && echo 'git c https://github.com $@' >> git-hub \
+  && chmod +x git-hub \
+  && echo "#!/usr/bin/env bash" > git-lab \
+  && echo "" >> git-lab \
+  && echo 'git c https://gitlab.com $@' >> git-lab \
+  && chmod +x git-lab \
   && addgroup --gid $UID $USERNAME \
   && adduser --uid $UID --gid $UID --shell /bin/bash --disabled-password --gecos "" $USERNAME \
   && echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USERNAME \
