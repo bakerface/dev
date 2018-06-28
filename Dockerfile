@@ -43,7 +43,6 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim \
   && cd ~/.vim/bundle \
   && git clone --depth 1 https://github.com/nanotech/jellybeans.vim \
-  && git clone --depth 1 https://github.com/soywod/vim-keepeye \
   && git clone --depth 1 https://github.com/Valloric/YouCompleteMe \
   && git clone --depth 1 https://github.com/elmcast/elm-vim \
   && git clone --depth 1 https://github.com/jason0x43/vim-js-indent \
@@ -77,16 +76,19 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "set number" >> .vimrc \
   && echo "set autoread" >> .vimrc \
   && echo "" >> .vimrc \
+  && echo "let g:ale_linters = {}" >> .vimrc \
+  && echo "let g:ale_fixers = {}" >> .vimrc \
+  && echo "let g:ale_fix_on_save = 1" >> .vimrc \
+  && echo "" >> .vimrc \
   && echo "if !exists('g:ycm_semantic_triggers')" >> .vimrc \
   && echo "  let g:ycm_semantic_triggers = {}" >> .vimrc \
   && echo "endif" >> .vimrc \
   && echo "" >> .vimrc \
-  && echo "let g:ycm_autoclose_preview_window_after_completion = 1" >> .vimrc \
   && echo "let g:ycm_semantic_triggers['javascript'] = ['.']" >> .vimrc \
   && echo "let g:ycm_semantic_triggers['typescript'] = ['.']" >> .vimrc \
-  && echo "let g:ale_linters = {}" >> .vimrc \
-  && echo "let g:ale_fixers = {}" >> .vimrc \
-  && echo "let g:ale_fix_on_save = 1" >> .vimrc \
+  && echo "let g:ycm_autoclose_preview_window_after_completion = 1" >> .vimrc \
+  && echo "" >> .vimrc \
+  && echo "let g:tsuquyomi_disable_quickfix = 1" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "autocmd FileType css let g:ale_linters = {" >> .vimrc \
   && echo "\  'css': glob('.stylelintrc*', '.;') != '' ? [ 'prettier', 'stylelint' ] : []," >> .vimrc \
