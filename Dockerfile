@@ -156,6 +156,7 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "nmap <silent> <C-k> :ALEPrevious<cr>" >> .vimrc \
   && echo "map <C-n> :NERDTreeToggle<cr>" >> .vimrc \
   && echo "map <C-i> :YcmCompleter FixIt<cr>" >> .vimrc \
+  && echo "map <C-h> :echo tsuquyomi#hint()<cr>" >> .vimrc \
   && git config --global user.name "$USER_FULLNAME" \
   && git config --global push.default simple \
   && git config --global credential.helper cache
