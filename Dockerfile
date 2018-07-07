@@ -113,6 +113,8 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "set number" >> .vimrc \
   && echo "set autoread" >> .vimrc \
   && echo "" >> .vimrc \
+  && echo "let NERDTreeIgnore=['node_modules']" >> .vimrc \
+  && echo "" >> .vimrc \
   && echo "let g:ale_linters = {}" >> .vimrc \
   && echo "let g:ale_fixers = {}" >> .vimrc \
   && echo "let g:ale_fix_on_save = 1" >> .vimrc \
