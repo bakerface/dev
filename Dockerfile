@@ -127,7 +127,7 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "let g:ycm_semantic_triggers['typescript'] = ['.']" >> .vimrc \
   && echo "let g:ycm_autoclose_preview_window_after_completion = 1" >> .vimrc \
   && echo "" >> .vimrc \
-  && echo "let g:tsuquyomi_disable_quickfix = 1" >> .vimrc \
+  && echo "let g:tsuquyomi_disable_quickfix = 0" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "autocmd FileType css let g:ale_linters = {" >> .vimrc \
   && echo "\  'css': glob('.stylelintrc*', '.;') != '' ? [ 'prettier', 'stylelint' ] : []," >> .vimrc \
