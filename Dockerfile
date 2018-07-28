@@ -10,6 +10,7 @@ ARG DOCKER_COMPOSE_URL=https://github.com/docker/compose/releases/download/1.21.
 RUN apt-get update && apt-get install -y autoconf build-essential cmake curl git iputils-ping make openssh-client python-dev python3-dev sudo tree vim \
   && curl -fsSL $NODE_URL | bash - \
   && apt-get install -y nodejs \
+  && curl https://cli-assets.heroku.com/install-ubuntu.sh | sh \
   && curl -fsSL $DOCKER_URL | sudo tar --strip-components=1 -C /usr/local/bin -xz \
   && curl -fsSL -o /usr/local/bin/docker-compose $DOCKER_COMPOSE_URL \
   && chmod +x /usr/local/bin/docker-compose \
