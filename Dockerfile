@@ -71,8 +71,9 @@ RUN apt-get update && apt-get install -y autoconf build-essential cmake curl git
   && addgroup --gid $UID $USERNAME \
   && adduser --uid $UID --gid $UID --shell /bin/bash --disabled-password --gecos "" $USERNAME \
   && echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USERNAME \
-  && chmod 440 /etc/sudoers.d/$USERNAME
-  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+  && chmod 440 /etc/sudoers.d/$USERNAME \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 USER $USERNAME
 WORKDIR /home/$USERNAME
