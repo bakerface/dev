@@ -14,7 +14,6 @@ RUN apt-get update && apt-get install -y autoconf build-essential cmake curl git
   && curl -fsSL $DOCKER_URL | sudo tar --strip-components=1 -C /usr/local/bin -xz \
   && curl -fsSL -o /usr/local/bin/docker-compose $DOCKER_COMPOSE_URL \
   && chmod +x /usr/local/bin/docker-compose \
-  && npm install -g typescript \
   && cd /usr/local/bin \
   && echo "#!/usr/bin/env bash" > git-email \
   && echo "" >> git-email \
