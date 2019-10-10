@@ -82,8 +82,8 @@ ENV EDITOR=vim VISUAL=vim TERM=xterm-256color
 RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim \
   && cd ~/.vim/bundle \
-  && git clone --depth 1 https://github.com/nanotech/jellybeans.vim \
   && git clone --depth 1 https://github.com/Valloric/YouCompleteMe \
+  && git clone --depth 1 https://github.com/airblade/vim-gitgutter \
   && git clone --depth 1 https://github.com/elmcast/elm-vim \
   && git clone --depth 1 https://github.com/jason0x43/vim-js-indent \
   && git clone --depth 1 https://github.com/leafgarland/typescript-vim \
@@ -106,8 +106,8 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "execute pathogen#infect()" > .vimrc \
   && echo "syntax on" >> .vimrc \
   && echo "filetype plugin indent on" >> .vimrc \
-  && echo "colorscheme jellybeans" >> .vimrc \
   && echo "" >> .vimrc \
+  && echo "set background=dark" >> .vimrc \
   && echo "set enc=utf-8" >> .vimrc \
   && echo "set tabstop=2" >> .vimrc \
   && echo "set softtabstop=2" >> .vimrc \
@@ -115,6 +115,12 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "set expandtab" >> .vimrc \
   && echo "set number" >> .vimrc \
   && echo "set autoread" >> .vimrc \
+  && echo "" >> .vimrc \
+  && echo "highlight clear SignColumn" >> .vimrc \
+  && echo "highlight GitGutterAdd ctermfg=green" >> .vimrc \
+  && echo "highlight GitGutterChange ctermfg=yellow" >> .vimrc \
+  && echo "highlight GitGutterDelete ctermfg=red" >> .vimrc \
+  && echo "highlight GitGutterChangeDelete ctermfg=yellow" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "let NERDTreeIgnore=['node_modules']" >> .vimrc \
   && echo "" >> .vimrc \
