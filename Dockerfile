@@ -155,11 +155,11 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "\}" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "autocmd FileType typescript let g:ale_linters = {" >> .vimrc \
-  && echo "\  'typescript': [ 'prettier', 'tslint' ]," >> .vimrc \
+  && echo "\  'typescript': glob('.eslintrc*', '.;') != '' ? [ 'prettier', 'eslint' ] : [ 'xo' ]," >> .vimrc \
   && echo "\}" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "autocmd FileType typescript let g:ale_fixers = {" >> .vimrc \
-  && echo "\  'typescript': [ 'prettier', 'tslint' ]," >> .vimrc \
+  && echo "\  'typescript': glob('.eslintrc*', '.;') != '' ? [ 'prettier', 'eslint' ] : [ 'xo' ]," >> .vimrc \
   && echo "\}" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "inoremap jk <Esc>" >> .vimrc \
