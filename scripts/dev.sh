@@ -16,6 +16,7 @@ if [ $? -ne 0 ]; then
     -e PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
     -e REACT_NATIVE_PACKAGER_HOSTNAME=$(ipconfig getifaddr en0) \
     -p 3000:3000 \
+    -p 8000:8000 \
     -p 8080:8080 \
     -p 8081:8081 \
     -p 9000:9000 \

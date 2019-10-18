@@ -31,43 +31,60 @@ RUN apt-get update && apt-get install -y autoconf build-essential cmake curl git
   && echo 'echo Using \\"$EMAIL\\" for git commits in this repository' >> git-email \
   && echo "exit 0" >> git-email \
   && chmod +x git-email \
-  && echo "#!/usr/bin/env bash" > git-c \
-  && echo "" >> git-c \
-  && echo "set -e" >> git-c \
-  && echo "" >> git-c \
-  && echo 'DOMAIN="$1"' >> git-c \
-  && echo 'ORG="$2"' >> git-c \
-  && echo 'REPO="$3"' >> git-c \
-  && echo "" >> git-c \
-  && echo 'if [ -z "$DOMAIN" ]; then' >> git-c \
-  && echo "  echo Cannot clone with empty domain" >> git-c \
-  && echo "  exit 1" >> git-c \
-  && echo "fi" >> git-c \
-  && echo "" >> git-c \
-  && echo 'if [ -z "$ORG" ]; then' >> git-c \
-  && echo "  echo Cannot clone with empty organization" >> git-c \
-  && echo "  exit 1" >> git-c \
-  && echo "fi" >> git-c \
-  && echo "" >> git-c \
-  && echo 'if [ -z "$REPO" ]; then' >> git-c \
-  && echo "  echo Cannot clone with empty repository" >> git-c \
-  && echo "  exit 1" >> git-c \
-  && echo "fi" >> git-c \
-  && echo "" >> git-c \
-  && echo 'git clone $DOMAIN/$ORG/$REPO.git' >> git-c \
-  && echo 'cd "$REPO"' >> git-c \
-  && echo 'git email' >> git-c \
-  && echo "" >> git-c \
-  && echo "exit 0" >> git-c \
-  && chmod +x git-c \
-  && echo "#!/usr/bin/env bash" > git-hub \
-  && echo "" >> git-hub \
-  && echo 'git c https://github.com $@' >> git-hub \
-  && chmod +x git-hub \
-  && echo "#!/usr/bin/env bash" > git-lab \
-  && echo "" >> git-lab \
-  && echo 'git c https://gitlab.com $@' >> git-lab \
-  && chmod +x git-lab \
+  && echo '#!/usr/bin/env node' >> npm-refresh \
+  && echo "" >> npm-refresh \
+  && echo 'const child_process = require("child_process");' >> npm-refresh \
+  && echo 'const fs = require("fs");' >> npm-refresh \
+  && echo "" >> npm-refresh \
+  && echo 'function spawn(command = "", args = []) {' >> npm-refresh \
+  && echo 'return new Promise((resolve, reject) => {' >> npm-refresh \
+  && echo '  const proc = child_process.spawn(command, args, {' >> npm-refresh \
+  && echo '    stdio: "inherit"' >> npm-refresh \
+  && echo '  });' >> npm-refresh \
+  && echo "" >> npm-refresh \
+  && echo '  proc.on("data", data => process.stdout.write(data));' >> npm-refresh \
+  && echo '  proc.on("error", reject);' >> npm-refresh \
+  && echo '  proc.on("exit", code => (code ? reject(code) : resolve()));' >> npm-refresh \
+  && echo '});' >> npm-refresh \
+  && echo '}' >> npm-refresh \
+  && echo "" >> npm-refresh \
+  && echo 'function getPackageNames(dependencies = {}) {' >> npm-refresh \
+  && echo 'const names = [];' >> npm-refresh \
+  && echo "" >> npm-refresh \
+  && echo 'for (const [name, url] of Object.entries(dependencies)) {' >> npm-refresh \
+  && echo '  if (url.includes("://")) {' >> npm-refresh \
+  && echo '    names.push(url);' >> npm-refresh \
+  && echo '  } else {' >> npm-refresh \
+  && echo '    names.push(name);' >> npm-refresh \
+  && echo '  }' >> npm-refresh \
+  && echo '}' >> npm-refresh \
+  && echo "" >> npm-refresh \
+  && echo 'return names;' >> npm-refresh \
+  && echo '}' >> npm-refresh \
+  && echo "" >> npm-refresh \
+  && echo 'async function main() {' >> npm-refresh \
+  && echo 'const packageJson = JSON.parse("" + fs.readFileSync("package.json"));' >> npm-refresh \
+  && echo 'const dependencies = getPackageNames(packageJson.dependencies);' >> npm-refresh \
+  && echo 'const devDependencies = getPackageNames(packageJson.devDependencies);' >> npm-refresh \
+  && echo "" >> npm-refresh \
+  && echo 'delete packageJson.dependencies;' >> npm-refresh \
+  && echo "" >> npm-refresh \
+  && echo 'fs.writeFileSync("package.json", JSON.stringify(packageJson));' >> npm-refresh \
+  && echo "" >> npm-refresh \
+  && echo 'if (dependencies.length > 0) {' >> npm-refresh \
+  && echo '  await spawn("npm", ["install", "-S", ...dependencies]);' >> npm-refresh \
+  && echo '}' >> npm-refresh \
+  && echo "" >> npm-refresh \
+  && echo 'if (devDependencies.length > 0) {' >> npm-refresh \
+  && echo '  await spawn("npm", ["install", "-D", ...devDependencies]);' >> npm-refresh \
+  && echo '}' >> npm-refresh \
+  && echo "" >> npm-refresh \
+  && echo 'await spawn("npm", ["audit", "fix"]);' >> npm-refresh \
+  && echo 'return 0;' >> npm-refresh \
+  && echo '}' >> npm-refresh \
+  && echo "" >> npm-refresh \
+  && echo 'main();' >> npm-refresh \
+  && chmod +x npm-refresh \
   && addgroup --gid $UID $USERNAME \
   && adduser --uid $UID --gid $UID --shell /bin/bash --disabled-password --gecos "" $USERNAME \
   && echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USERNAME \
