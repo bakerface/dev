@@ -3,11 +3,15 @@ FROM ubuntu
 ARG UID=1000
 ARG USERNAME=bakerface
 ARG USER_FULLNAME="Chris Baker"
+ARG TZ=America/Kentucky/Louisville
 ARG NODE_URL=https://deb.nodesource.com/setup_10.x
 ARG DOCKER_URL=https://download.docker.com/linux/static/stable/x86_64/docker-18.03.1-ce.tgz
 ARG DOCKER_COMPOSE_URL=https://github.com/docker/compose/releases/download/1.21.2/docker-compose-Linux-x86_64
 
-RUN apt-get update && apt-get install -y autoconf build-essential cmake curl git iputils-ping make openssh-client python-dev python3-dev sudo tree vim \
+ENV TZ $TZ
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
+  && apt-get update && apt-get install -y autoconf build-essential cmake curl git iputils-ping make openssh-client python-dev python3-dev sudo tree tzdata vim \
   && curl -fsSL $NODE_URL | bash - \
   && apt-get install -y nodejs \
   && curl https://cli-assets.heroku.com/install-ubuntu.sh | sh \
@@ -118,7 +122,7 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && git clone --depth 1 https://github.com/w0rp/ale \
   && cd ~/.vim/bundle/YouCompleteMe \
   && git submodule update --init --recursive \
-  && ./install.py --clang-completer --js-completer \
+  && ./install.py --clang-completer --ts-completer \
   && cd ~ \
   && echo "execute pathogen#infect()" > .vimrc \
   && echo "syntax on" >> .vimrc \
