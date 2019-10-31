@@ -4,9 +4,9 @@ ARG UID=1000
 ARG USERNAME=bakerface
 ARG USER_FULLNAME="Chris Baker"
 ARG TZ=America/Kentucky/Louisville
-ARG NODE_URL=https://deb.nodesource.com/setup_10.x
-ARG DOCKER_URL=https://download.docker.com/linux/static/stable/x86_64/docker-18.03.1-ce.tgz
-ARG DOCKER_COMPOSE_URL=https://github.com/docker/compose/releases/download/1.21.2/docker-compose-Linux-x86_64
+ARG NODE_URL=https://deb.nodesource.com/setup_12.x
+ARG DOCKER_URL=https://download.docker.com/linux/static/stable/x86_64/docker-18.06.3-ce.tgz
+ARG DOCKER_COMPOSE_URL=https://github.com/docker/compose/releases/download/1.24.1/docker-compose-Linux-x86_64
 
 ENV TZ $TZ
 
@@ -93,6 +93,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
   && adduser --uid $UID --gid $UID --shell /bin/bash --disabled-password --gecos "" $USERNAME \
   && echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USERNAME \
   && chmod 440 /etc/sudoers.d/$USERNAME \
+  && addgroup docker \
+  && usermod -aG docker $USERNAME \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

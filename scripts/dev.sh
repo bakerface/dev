@@ -1,7 +1,5 @@
 #!/bin/bash
 
-clear
-
 docker exec \
   -e COLUMNS=$(tput cols) \
   -e LINES=$(tput lines) \
@@ -10,17 +8,12 @@ docker exec \
 if [ $? -ne 0 ]; then
   docker run --rm \
     --name dev \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    -v $HOME:/home/host \
+    --privileged \
+    --net=host \
+    -v /var/run/docker.sock:/var/run/docker.sock:Z \
+    -v $HOME:/home/host:Z \
+    -v $HOME/.ssh:/home/bakerface/.ssh:Z \
     -e CHOKIDAR_USEPOLLING=1 \
     -e PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
-    -e REACT_NATIVE_PACKAGER_HOSTNAME=$(ipconfig getifaddr en0) \
-    -p 3000:3000 \
-    -p 8000:8000 \
-    -p 8080:8080 \
-    -p 8081:8081 \
-    -p 9000:9000 \
-    -p 19000:19000 \
-    -p 19001:19001 \
     -it bakerface/dev
 fi
