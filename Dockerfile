@@ -195,6 +195,7 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "map <C-h> :echo tsuquyomi#hint()<cr>" >> .vimrc \
   && git config --global user.name "$USER_FULLNAME" \
   && git config --global push.default simple \
-  && git config --global credential.helper cache
+  && git config --global credential.helper cache \
+  && git config --global user.useConfigOnly true
 
 ENTRYPOINT ["bash"]
