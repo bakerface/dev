@@ -13,7 +13,7 @@ ENV TZ $TZ
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
   && echo $TZ > /etc/timezone \
   && apt-get update \
-  && apt-get install -y autoconf build-essential cmake curl git iputils-ping make net-tools openssh-client python-dev python3-dev sudo telnet tree tzdata vim \
+  && apt-get install -y autoconf build-essential cmake curl git iputils-ping make net-tools openssh-client python-dev python3-dev sudo telnet tree tzdata unzip vim zip \
   && curl -fsSL $NODE_URL | bash - \
   && apt-get install -y nodejs \
   && curl https://cli-assets.heroku.com/install-ubuntu.sh | sh \
