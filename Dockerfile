@@ -55,38 +55,38 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
   && echo '}' >> npm-refresh \
   && echo "" >> npm-refresh \
   && echo 'function getPackageNames(dependencies = {}) {' >> npm-refresh \
-  && echo 'const names = [];' >> npm-refresh \
-  && echo "" >> npm-refresh \
-  && echo 'for (const [name, url] of Object.entries(dependencies)) {' >> npm-refresh \
-  && echo '  if (url.includes("://")) {' >> npm-refresh \
-  && echo '    names.push(url);' >> npm-refresh \
-  && echo '  } else {' >> npm-refresh \
-  && echo '    names.push(name);' >> npm-refresh \
+  && echo '  const names = [];' >> npm-refresh \
+  && echo "  " >> npm-refresh \
+  && echo '  for (const [name, url] of Object.entries(dependencies)) {' >> npm-refresh \
+  && echo '    if (url.includes("://")) {' >> npm-refresh \
+  && echo '      names.push(url);' >> npm-refresh \
+  && echo '    } else {' >> npm-refresh \
+  && echo '      names.push(name);' >> npm-refresh \
+  && echo '    }' >> npm-refresh \
   && echo '  }' >> npm-refresh \
-  && echo '}' >> npm-refresh \
-  && echo "" >> npm-refresh \
-  && echo 'return names;' >> npm-refresh \
+  && echo "  " >> npm-refresh \
+  && echo '  return names;' >> npm-refresh \
   && echo '}' >> npm-refresh \
   && echo "" >> npm-refresh \
   && echo 'async function main() {' >> npm-refresh \
-  && echo 'const packageJson = JSON.parse("" + fs.readFileSync("package.json"));' >> npm-refresh \
-  && echo 'const dependencies = getPackageNames(packageJson.dependencies);' >> npm-refresh \
-  && echo 'const devDependencies = getPackageNames(packageJson.devDependencies);' >> npm-refresh \
-  && echo "" >> npm-refresh \
-  && echo 'delete packageJson.dependencies;' >> npm-refresh \
-  && echo "" >> npm-refresh \
-  && echo 'fs.writeFileSync("package.json", JSON.stringify(packageJson));' >> npm-refresh \
-  && echo "" >> npm-refresh \
-  && echo 'if (dependencies.length > 0) {' >> npm-refresh \
-  && echo '  await spawn("npm", ["install", "-S", ...dependencies]);' >> npm-refresh \
-  && echo '}' >> npm-refresh \
-  && echo "" >> npm-refresh \
-  && echo 'if (devDependencies.length > 0) {' >> npm-refresh \
-  && echo '  await spawn("npm", ["install", "-D", ...devDependencies]);' >> npm-refresh \
-  && echo '}' >> npm-refresh \
-  && echo "" >> npm-refresh \
-  && echo 'await spawn("npm", ["audit", "fix"]);' >> npm-refresh \
-  && echo 'return 0;' >> npm-refresh \
+  && echo '  const packageJson = JSON.parse("" + fs.readFileSync("package.json"));' >> npm-refresh \
+  && echo '  const dependencies = getPackageNames(packageJson.dependencies);' >> npm-refresh \
+  && echo '  const devDependencies = getPackageNames(packageJson.devDependencies);' >> npm-refresh \
+  && echo "  " >> npm-refresh \
+  && echo '  delete packageJson.dependencies;' >> npm-refresh \
+  && echo "  " >> npm-refresh \
+  && echo '  fs.writeFileSync("package.json", JSON.stringify(packageJson));' >> npm-refresh \
+  && echo "  " >> npm-refresh \
+  && echo '  if (dependencies.length > 0) {' >> npm-refresh \
+  && echo '    await spawn("npm", ["install", "-S", ...dependencies]);' >> npm-refresh \
+  && echo '  }' >> npm-refresh \
+  && echo "  " >> npm-refresh \
+  && echo '  if (devDependencies.length > 0) {' >> npm-refresh \
+  && echo '    await spawn("npm", ["install", "-D", ...devDependencies]);' >> npm-refresh \
+  && echo '  }' >> npm-refresh \
+  && echo "  " >> npm-refresh \
+  && echo '  await spawn("npm", ["audit", "fix"]);' >> npm-refresh \
+  && echo '  return 0;' >> npm-refresh \
   && echo '}' >> npm-refresh \
   && echo "" >> npm-refresh \
   && echo 'main();' >> npm-refresh \
