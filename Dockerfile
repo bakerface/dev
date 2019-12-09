@@ -13,7 +13,12 @@ ENV TZ $TZ
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
   && echo $TZ > /etc/timezone \
   && apt-get update \
-  && apt-get install -y autoconf build-essential cmake curl git iputils-ping make net-tools openssh-client python-dev python3-dev sudo telnet tree tzdata unzip vim zip \
+  && apt-get install -y gnupg ca-certificates \
+  && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
+  && echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | tee /etc/apt/sources.list.d/mono-official-stable.list \
+  && apt-get update \
+  && apt-get install -y autoconf build-essential cmake curl git iputils-ping make mono-devel net-tools openssh-client python-dev python3-dev sudo telnet tree tzdata unzip vim zip \
+  && apt-get update \
   && curl -fsSL $NODE_URL | bash - \
   && apt-get install -y nodejs \
   && curl https://cli-assets.heroku.com/install-ubuntu.sh | sh \
@@ -43,20 +48,20 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
   && echo 'const fs = require("fs");' >> npm-refresh \
   && echo "" >> npm-refresh \
   && echo 'function spawn(command = "", args = []) {' >> npm-refresh \
-  && echo 'return new Promise((resolve, reject) => {' >> npm-refresh \
-  && echo '  const proc = child_process.spawn(command, args, {' >> npm-refresh \
-  && echo '    stdio: "inherit"' >> npm-refresh \
-  && echo '  });' >> npm-refresh \
+  && echo '  return new Promise((resolve, reject) => {' >> npm-refresh \
+  && echo '    const proc = child_process.spawn(command, args, {' >> npm-refresh \
+  && echo '      stdio: "inherit"' >> npm-refresh \
+  && echo '    });' >> npm-refresh \
   && echo "" >> npm-refresh \
-  && echo '  proc.on("data", data => process.stdout.write(data));' >> npm-refresh \
-  && echo '  proc.on("error", reject);' >> npm-refresh \
-  && echo '  proc.on("exit", code => (code ? reject(code) : resolve()));' >> npm-refresh \
-  && echo '});' >> npm-refresh \
+  && echo '    proc.on("data", data => process.stdout.write(data));' >> npm-refresh \
+  && echo '    proc.on("error", reject);' >> npm-refresh \
+  && echo '    proc.on("exit", code => (code ? reject(code) : resolve()));' >> npm-refresh \
+  && echo '  });' >> npm-refresh \
   && echo '}' >> npm-refresh \
   && echo "" >> npm-refresh \
   && echo 'function getPackageNames(dependencies = {}) {' >> npm-refresh \
   && echo '  const names = [];' >> npm-refresh \
-  && echo "  " >> npm-refresh \
+  && echo "" >> npm-refresh \
   && echo '  for (const [name, url] of Object.entries(dependencies)) {' >> npm-refresh \
   && echo '    if (url.includes("://")) {' >> npm-refresh \
   && echo '      names.push(url);' >> npm-refresh \
@@ -64,7 +69,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
   && echo '      names.push(name);' >> npm-refresh \
   && echo '    }' >> npm-refresh \
   && echo '  }' >> npm-refresh \
-  && echo "  " >> npm-refresh \
+  && echo "" >> npm-refresh \
   && echo '  return names;' >> npm-refresh \
   && echo '}' >> npm-refresh \
   && echo "" >> npm-refresh \
@@ -72,9 +77,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
   && echo '  const packageJson = JSON.parse("" + fs.readFileSync("package.json"));' >> npm-refresh \
   && echo '  const dependencies = getPackageNames(packageJson.dependencies);' >> npm-refresh \
   && echo '  const devDependencies = getPackageNames(packageJson.devDependencies);' >> npm-refresh \
-  && echo "  " >> npm-refresh \
+  && echo "" >> npm-refresh \
   && echo '  delete packageJson.dependencies;' >> npm-refresh \
-  && echo "  " >> npm-refresh \
+  && echo "" >> npm-refresh \
   && echo '  fs.writeFileSync("package.json", JSON.stringify(packageJson));' >> npm-refresh \
   && echo "  " >> npm-refresh \
   && echo '  if (dependencies.length > 0) {' >> npm-refresh \
@@ -84,7 +89,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
   && echo '  if (devDependencies.length > 0) {' >> npm-refresh \
   && echo '    await spawn("npm", ["install", "-D", ...devDependencies]);' >> npm-refresh \
   && echo '  }' >> npm-refresh \
-  && echo "  " >> npm-refresh \
+  && echo "" >> npm-refresh \
   && echo '  await spawn("npm", ["audit", "fix"]);' >> npm-refresh \
   && echo '  return 0;' >> npm-refresh \
   && echo '}' >> npm-refresh \
@@ -126,7 +131,7 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && git clone --depth 1 https://github.com/w0rp/ale \
   && cd ~/.vim/bundle/YouCompleteMe \
   && git submodule update --init --recursive \
-  && ./install.py --clang-completer --ts-completer \
+  && ./install.py --clang-completer --cs-completer --ts-completer \
   && cd ~ \
   && echo "execute pathogen#infect()" > .vimrc \
   && echo "syntax on" >> .vimrc \
@@ -164,27 +169,27 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "let g:tsuquyomi_disable_quickfix = 0" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "autocmd FileType css let g:ale_linters = {" >> .vimrc \
-  && echo "\  'css': glob('.stylelintrc*', '.;') != '' ? [ 'prettier', 'stylelint' ] : []," >> .vimrc \
+  && echo "\  'css': glob('.stylelintrc*', '.;') != '' ? ['prettier', 'stylelint'] : ['prettier']," >> .vimrc \
   && echo "\}" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "autocmd FileType css let g:ale_fixers = {" >> .vimrc \
-  && echo "\  'css': glob('.stylelintrc*', '.;') != '' ? [ 'prettier', 'stylelint' ] : []," >> .vimrc \
+  && echo "\  'css': glob('.stylelintrc*', '.;') != '' ? ['prettier', 'stylelint'] : ['prettier']," >> .vimrc \
   && echo "\}" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "autocmd FileType javascript let g:ale_linters = {" >> .vimrc \
-  && echo "\  'javascript': glob('.eslintrc*', '.;') != '' ? [ 'prettier', 'eslint' ] : [ 'xo' ]," >> .vimrc \
+  && echo "\  'javascript': glob('.eslintrc*', '.;') != '' ? ['prettier', 'eslint'] : ['prettier']," >> .vimrc \
   && echo "\}" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "autocmd FileType javascript let g:ale_fixers = {" >> .vimrc \
-  && echo "\  'javascript': glob('.eslintrc*', '.;') != '' ? [ 'prettier', 'eslint' ] : [ 'xo' ]," >> .vimrc \
+  && echo "\  'javascript': glob('.eslintrc*', '.;') != '' ? ['prettier', 'eslint'] : ['prettier']," >> .vimrc \
   && echo "\}" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "autocmd FileType typescript let g:ale_linters = {" >> .vimrc \
-  && echo "\  'typescript': glob('.eslintrc*', '.;') != '' ? [ 'prettier', 'eslint' ] : [ 'xo' ]," >> .vimrc \
+  && echo "\  'typescript': glob('.eslintrc*', '.;') != '' ? ['prettier', 'eslint'] : ['prettier']," >> .vimrc \
   && echo "\}" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "autocmd FileType typescript let g:ale_fixers = {" >> .vimrc \
-  && echo "\  'typescript': glob('.eslintrc*', '.;') != '' ? [ 'prettier', 'eslint' ] : [ 'xo' ]," >> .vimrc \
+  && echo "\  'typescript': glob('.eslintrc*', '.;') != '' ? ['prettier', 'eslint'] : ['prettier']," >> .vimrc \
   && echo "\}" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "inoremap jk <Esc>" >> .vimrc \
