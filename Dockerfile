@@ -119,6 +119,7 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && git clone --depth 1 https://github.com/leafgarland/typescript-vim \
   && git clone --depth 1 https://github.com/mhartington/vim-typings \
   && git clone --depth 1 https://github.com/mxw/vim-jsx \
+  && git clone --depth 1 https://github.com/OmniSharp/omnisharp-vim \
   && git clone --depth 1 https://github.com/pangloss/vim-javascript \
   && git clone --depth 1 https://github.com/posva/vim-vue \
   && git clone --depth 1 https://github.com/quramy/tsuquyomi.git \
@@ -167,6 +168,10 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && echo "let g:ycm_autoclose_preview_window_after_completion = 1" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "let g:tsuquyomi_disable_quickfix = 0" >> .vimrc \
+  && echo "" >> .vimrc \
+  && echo "autocmd FileType cs let g:ale_linters = {" >> .vimrc \
+  && echo "\  'cs': ['OmniSharp']," >> .vimrc \
+  && echo "\}" >> .vimrc \
   && echo "" >> .vimrc \
   && echo "autocmd FileType css let g:ale_linters = {" >> .vimrc \
   && echo "\  'css': glob('.stylelintrc*', '.;') != '' ? ['prettier', 'stylelint'] : ['prettier']," >> .vimrc \
