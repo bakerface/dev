@@ -133,6 +133,8 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && cd ~/.vim/bundle/YouCompleteMe \
   && git submodule update --init --recursive \
   && ./install.py --clang-completer --cs-completer --ts-completer \
+  && cd ~/.vim/bundle/YouCompleteMe/third_party/ycmd/third_party/tsserver/lib \
+  && npm update \
   && cd ~ \
   && echo "execute pathogen#infect()" > .vimrc \
   && echo "syntax on" >> .vimrc \
