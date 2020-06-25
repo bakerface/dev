@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+NAME=$(git config user.name)
+EMAIL=$(git log --author="$NAME" --format="%ae" -n 1)
+
+if [ -z "$EMAIL" ]; then
+  echo Could not find an email associated with name \"$NAME\"
+  exit 1
+fi
+
+git config user.email "$EMAIL"
+
+echo Using \"$EMAIL\" for git commits in this repository
+exit 0

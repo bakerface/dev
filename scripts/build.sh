@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker build --no-cache -t bakerface/dev .
+docker build -t bakerface/dev .

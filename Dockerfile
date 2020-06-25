@@ -26,76 +26,6 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
   && curl -fsSL -o /usr/local/bin/docker-compose $DOCKER_COMPOSE_URL \
   && chmod +x /usr/local/bin/docker-compose \
   && npm install -g typescript wsc \
-  && cd /usr/local/bin \
-  && echo "#!/usr/bin/env bash" > git-email \
-  && echo "" >> git-email \
-  && echo 'NAME=$(git config user.name)' >> git-email \
-  && echo 'EMAIL=$(git log --author="$NAME" --format="%ae" -n 1)' >> git-email \
-  && echo "" >> git-email \
-  && echo 'if [ -z "$EMAIL" ]; then' >> git-email \
-  && echo '  echo Could not find an email associated with name \\"$NAME\\"' >> git-email \
-  && echo "  exit 1" >> git-email \
-  && echo "fi" >> git-email \
-  && echo "" >> git-email \
-  && echo 'git config user.email "$EMAIL"' >> git-email \
-  && echo "" >> git-email \
-  && echo 'echo Using \\"$EMAIL\\" for git commits in this repository' >> git-email \
-  && echo "exit 0" >> git-email \
-  && chmod +x git-email \
-  && echo '#!/usr/bin/env node' >> npm-refresh \
-  && echo "" >> npm-refresh \
-  && echo 'const child_process = require("child_process");' >> npm-refresh \
-  && echo 'const fs = require("fs");' >> npm-refresh \
-  && echo "" >> npm-refresh \
-  && echo 'function spawn(command = "", args = []) {' >> npm-refresh \
-  && echo '  return new Promise((resolve, reject) => {' >> npm-refresh \
-  && echo '    const proc = child_process.spawn(command, args, {' >> npm-refresh \
-  && echo '      stdio: "inherit"' >> npm-refresh \
-  && echo '    });' >> npm-refresh \
-  && echo "" >> npm-refresh \
-  && echo '    proc.on("data", data => process.stdout.write(data));' >> npm-refresh \
-  && echo '    proc.on("error", reject);' >> npm-refresh \
-  && echo '    proc.on("exit", code => (code ? reject(code) : resolve()));' >> npm-refresh \
-  && echo '  });' >> npm-refresh \
-  && echo '}' >> npm-refresh \
-  && echo "" >> npm-refresh \
-  && echo 'function getPackageNames(dependencies = {}) {' >> npm-refresh \
-  && echo '  const names = [];' >> npm-refresh \
-  && echo "" >> npm-refresh \
-  && echo '  for (const [name, url] of Object.entries(dependencies)) {' >> npm-refresh \
-  && echo '    if (url.includes("://")) {' >> npm-refresh \
-  && echo '      names.push(url);' >> npm-refresh \
-  && echo '    } else {' >> npm-refresh \
-  && echo '      names.push(name);' >> npm-refresh \
-  && echo '    }' >> npm-refresh \
-  && echo '  }' >> npm-refresh \
-  && echo "" >> npm-refresh \
-  && echo '  return names;' >> npm-refresh \
-  && echo '}' >> npm-refresh \
-  && echo "" >> npm-refresh \
-  && echo 'async function main() {' >> npm-refresh \
-  && echo '  const packageJson = JSON.parse("" + fs.readFileSync("package.json"));' >> npm-refresh \
-  && echo '  const dependencies = getPackageNames(packageJson.dependencies);' >> npm-refresh \
-  && echo '  const devDependencies = getPackageNames(packageJson.devDependencies);' >> npm-refresh \
-  && echo "" >> npm-refresh \
-  && echo '  delete packageJson.dependencies;' >> npm-refresh \
-  && echo "" >> npm-refresh \
-  && echo '  fs.writeFileSync("package.json", JSON.stringify(packageJson));' >> npm-refresh \
-  && echo "  " >> npm-refresh \
-  && echo '  if (dependencies.length > 0) {' >> npm-refresh \
-  && echo '    await spawn("npm", ["install", "-S", ...dependencies]);' >> npm-refresh \
-  && echo '  }' >> npm-refresh \
-  && echo "  " >> npm-refresh \
-  && echo '  if (devDependencies.length > 0) {' >> npm-refresh \
-  && echo '    await spawn("npm", ["install", "-D", ...devDependencies]);' >> npm-refresh \
-  && echo '  }' >> npm-refresh \
-  && echo "" >> npm-refresh \
-  && echo '  await spawn("npm", ["audit", "fix"]);' >> npm-refresh \
-  && echo '  return 0;' >> npm-refresh \
-  && echo '}' >> npm-refresh \
-  && echo "" >> npm-refresh \
-  && echo 'main();' >> npm-refresh \
-  && chmod +x npm-refresh \
   && addgroup --gid $UID $USERNAME \
   && adduser --uid $UID --gid $UID --shell /bin/bash --disabled-password --gecos "" $USERNAME \
   && echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USERNAME \
@@ -134,80 +64,15 @@ RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
   && git submodule update --init --recursive \
   && ./install.py --clang-completer --cs-completer --ts-completer \
   && cd ~/.vim/bundle/YouCompleteMe/third_party/ycmd/third_party/tsserver/lib \
-  && npm update \
-  && cd ~ \
-  && echo "execute pathogen#infect()" > .vimrc \
-  && echo "syntax on" >> .vimrc \
-  && echo "filetype plugin indent on" >> .vimrc \
-  && echo "" >> .vimrc \
-  && echo "set background=dark" >> .vimrc \
-  && echo "set enc=utf-8" >> .vimrc \
-  && echo "set tabstop=2" >> .vimrc \
-  && echo "set softtabstop=2" >> .vimrc \
-  && echo "set shiftwidth=2" >> .vimrc \
-  && echo "set expandtab" >> .vimrc \
-  && echo "set number" >> .vimrc \
-  && echo "set autoread" >> .vimrc \
-  && echo "" >> .vimrc \
-  && echo "highlight clear SignColumn" >> .vimrc \
-  && echo "highlight GitGutterAdd ctermfg=green" >> .vimrc \
-  && echo "highlight GitGutterChange ctermfg=yellow" >> .vimrc \
-  && echo "highlight GitGutterDelete ctermfg=red" >> .vimrc \
-  && echo "highlight GitGutterChangeDelete ctermfg=yellow" >> .vimrc \
-  && echo "" >> .vimrc \
-  && echo "let NERDTreeIgnore=['node_modules']" >> .vimrc \
-  && echo "" >> .vimrc \
-  && echo "let g:ale_linters = {}" >> .vimrc \
-  && echo "let g:ale_fixers = {}" >> .vimrc \
-  && echo "let g:ale_fix_on_save = 1" >> .vimrc \
-  && echo "" >> .vimrc \
-  && echo "if !exists('g:ycm_semantic_triggers')" >> .vimrc \
-  && echo "  let g:ycm_semantic_triggers = {}" >> .vimrc \
-  && echo "endif" >> .vimrc \
-  && echo "" >> .vimrc \
-  && echo "let g:ycm_semantic_triggers['javascript'] = ['.']" >> .vimrc \
-  && echo "let g:ycm_semantic_triggers['typescript'] = ['.']" >> .vimrc \
-  && echo "let g:ycm_autoclose_preview_window_after_completion = 1" >> .vimrc \
-  && echo "" >> .vimrc \
-  && echo "let g:tsuquyomi_disable_quickfix = 0" >> .vimrc \
-  && echo "" >> .vimrc \
-  && echo "autocmd FileType cs let g:ale_linters = {" >> .vimrc \
-  && echo "\  'cs': ['OmniSharp']," >> .vimrc \
-  && echo "\}" >> .vimrc \
-  && echo "" >> .vimrc \
-  && echo "autocmd FileType css let g:ale_linters = {" >> .vimrc \
-  && echo "\  'css': glob('.stylelintrc*', '.;') != '' ? ['prettier', 'stylelint'] : ['prettier']," >> .vimrc \
-  && echo "\}" >> .vimrc \
-  && echo "" >> .vimrc \
-  && echo "autocmd FileType css let g:ale_fixers = {" >> .vimrc \
-  && echo "\  'css': glob('.stylelintrc*', '.;') != '' ? ['prettier', 'stylelint'] : ['prettier']," >> .vimrc \
-  && echo "\}" >> .vimrc \
-  && echo "" >> .vimrc \
-  && echo "autocmd FileType javascript let g:ale_linters = {" >> .vimrc \
-  && echo "\  'javascript': glob('.eslintrc*', '.;') != '' ? ['prettier', 'eslint'] : ['prettier']," >> .vimrc \
-  && echo "\}" >> .vimrc \
-  && echo "" >> .vimrc \
-  && echo "autocmd FileType javascript let g:ale_fixers = {" >> .vimrc \
-  && echo "\  'javascript': glob('.eslintrc*', '.;') != '' ? ['prettier', 'eslint'] : ['prettier']," >> .vimrc \
-  && echo "\}" >> .vimrc \
-  && echo "" >> .vimrc \
-  && echo "autocmd FileType typescript let g:ale_linters = {" >> .vimrc \
-  && echo "\  'typescript': glob('.eslintrc*', '.;') != '' ? ['prettier', 'eslint'] : ['prettier']," >> .vimrc \
-  && echo "\}" >> .vimrc \
-  && echo "" >> .vimrc \
-  && echo "autocmd FileType typescript let g:ale_fixers = {" >> .vimrc \
-  && echo "\  'typescript': glob('.eslintrc*', '.;') != '' ? ['prettier', 'eslint'] : ['prettier']," >> .vimrc \
-  && echo "\}" >> .vimrc \
-  && echo "" >> .vimrc \
-  && echo "inoremap jk <Esc>" >> .vimrc \
-  && echo "nmap <silent> <C-j> :ALENext<cr>" >> .vimrc \
-  && echo "nmap <silent> <C-k> :ALEPrevious<cr>" >> .vimrc \
-  && echo "map <C-n> :NERDTreeToggle<cr>" >> .vimrc \
-  && echo "map <C-i> :YcmCompleter FixIt<cr>" >> .vimrc \
-  && echo "map <C-h> :echo tsuquyomi#hint()<cr>" >> .vimrc \
+  && npm update
+
+COPY --chown=$UID:$UID home .
+
+RUN chmod +x ~/bin/* \
   && git config --global user.name "$USER_FULLNAME" \
   && git config --global push.default simple \
   && git config --global credential.helper cache \
   && git config --global user.useConfigOnly true
 
 ENTRYPOINT ["bash"]
+CMD ["-l"]
