@@ -2,7 +2,7 @@ execute pathogen#infect()
 syntax on
 filetype plugin indent on
 
-set background=dark
+set background=light
 set enc=utf-8
 set tabstop=2
 set softtabstop=2
