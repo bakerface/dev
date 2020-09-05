@@ -11,7 +11,7 @@ ENV TZ $TZ
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
   && echo $TZ > /etc/timezone \
   && apt-get update \
-  && apt-get install -y autoconf build-essential cmake curl git iputils-ping make net-tools openssh-client python-dev python3-dev sudo telnet tree tzdata unzip vim zip \
+  && apt-get install -y autoconf build-essential cmake curl git iputils-ping make net-tools openssh-client python-dev python3-dev sudo telnet tree tzdata unzip neovim zip \
   && curl -fsSL $DOCKER_URL | sudo tar --strip-components=1 -C /usr/local/bin -xz \
   && addgroup --gid $UID $USERNAME \
   && adduser --uid $UID --gid $UID --shell /bin/bash --disabled-password --gecos "" $USERNAME \
@@ -25,20 +25,19 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
 USER $USERNAME
 WORKDIR /home/$USERNAME
 ENV EDITOR=vim VISUAL=vim TERM=xterm-256color
+ENV NVIM_PACK /home/$USERNAME/.local/share/nvim/site/pack/
 
-RUN mkdir -p ~/.vim/autoload ~/.vim/bundle \
-  && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim \
-  && cd ~/.vim/bundle \
-  && git clone --depth 1 https://github.com/scrooloose/nerdtree \
-  && git clone --depth 1 https://github.com/tpope/vim-fugitive \
-  && git clone --depth 1 https://github.com/tpope/vim-sensible \
-  && git clone --depth 1 https://github.com/vim-airline/vim-airline \
-  && git clone --depth 1 https://github.com/peitalin/vim-jsx-typescript \
-  && git clone --depth 1 https://github.com/othree/javascript-libraries-syntax.vim \
-  && git clone --depth 1 https://github.com/othree/yajs.vim \
-  && git clone --depth 1 https://github.com/HerringtonDarkholme/yats.vim \
-  && git clone --depth 1 https://github.com/mxw/vim-jsx \
-  && git clone --depth 1 https://github.com/neoclide/coc.nvim -b release \
+RUN mkdir -p $NVIM_PACK/common/start \
+  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/scrooloose/nerdtree \
+  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/tpope/vim-fugitive \
+  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/tpope/vim-sensible \
+  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/vim-airline/vim-airline \
+  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/peitalin/vim-jsx-typescript \
+  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/othree/javascript-libraries-syntax.vim \
+  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/othree/yajs.vim \
+  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/HerringtonDarkholme/yats.vim \
+  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/mxw/vim-jsx \
+  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/neoclide/coc.nvim -b release \
   && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 
 SHELL ["/bin/bash", "-l", "-i", "-c"]
@@ -50,7 +49,9 @@ SHELL ["/bin/bash", "-l", "-c"]
 
 COPY --chown=$UID:$UID home .
 
-RUN chmod +x ~/bin/* \
+RUN chmod +x ~/.bin/* \
+  && echo '' >> ~/.bashrc \
+  && echo 'export PATH="${PATH}:${HOME}/.bin"' >> ~/.bashrc \
   && git config --global user.name "$USER_FULLNAME" \
   && git config --global push.default simple \
   && git config --global credential.helper cache \
