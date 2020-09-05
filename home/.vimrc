@@ -1,69 +1,155 @@
+" REFERENCES: {{{
+
+" How to do 90% of what plugins do (with just vim)
+" https://www.youtube.com/watch?v=XA2WjJbmmoM
+
+" }}}
+
+" BASIC SETUP: {{{
 execute pathogen#infect()
 syntax on
 filetype plugin indent on
 
+"set background=dark
 set background=light
-set enc=utf-8
+set t_Co=256
+
+set hidden
+set foldmethod=marker
+set encoding=utf-8
 set tabstop=2
 set softtabstop=2
 set shiftwidth=2
 set expandtab
 set number
-set autoread
+set ruler
+set nowrap
 
+" Make the gutter transparent and always active
 highlight clear SignColumn
-highlight GitGutterAdd ctermfg=green
-highlight GitGutterChange ctermfg=yellow
-highlight GitGutterDelete ctermfg=red
-highlight GitGutterChangeDelete ctermfg=yellow
+set signcolumn=yes
 
-let NERDTreeIgnore=['node_modules']
+" Use comma as the leader
+let g:mapleader=','
 
-let g:ale_linters = {}
-let g:ale_fixers = {}
-let g:ale_fix_on_save = 1
+" }}}
 
-if !exists('g:ycm_semantic_triggers')
-  let g:ycm_semantic_triggers = {}
-endif
+" GENERIC KEY MAPPINGS: {{{
 
-let g:ycm_semantic_triggers['javascript'] = ['.']
-let g:ycm_semantic_triggers['typescript'] = ['.']
-let g:ycm_autoclose_preview_window_after_completion = 1
-
-let g:tsuquyomi_disable_quickfix = 0
-
-autocmd FileType cs let g:ale_linters = {
-\  'cs': ['OmniSharp'],
-\}
-
-autocmd FileType css let g:ale_linters = {
-\  'css': glob('.stylelintrc*', '.;') != '' ? ['prettier', 'stylelint'] : ['prettier'],
-\}
-
-autocmd FileType css let g:ale_fixers = {
-\  'css': glob('.stylelintrc*', '.;') != '' ? ['prettier', 'stylelint'] : ['prettier'],
-\}
-
-autocmd FileType javascript let g:ale_linters = {
-\  'javascript': glob('.eslintrc*', '.;') != '' ? ['prettier', 'eslint'] : ['prettier'],
-\}
-
-autocmd FileType javascript let g:ale_fixers = {
-\  'javascript': glob('.eslintrc*', '.;') != '' ? ['prettier', 'eslint'] : ['prettier'],
-\}
-
-autocmd FileType typescript let g:ale_linters = {
-\  'typescript': glob('.eslintrc*', '.;') != '' ? ['prettier', 'eslint'] : ['prettier'],
-\}
-
-autocmd FileType typescript let g:ale_fixers = {
-\  'typescript': glob('.eslintrc*', '.;') != '' ? ['prettier', 'eslint'] : ['prettier'],
-\}
-
+" Remap the escape key to 'jk' in insert mode
+" This is to avoid the software escape key on Mac touchbars
 inoremap jk <Esc>
-nmap <silent> <C-j> :ALENext<cr>
-nmap <silent> <C-k> :ALEPrevious<cr>
-map <C-n> :NERDTreeToggle<cr>
-map <C-i> :YcmCompleter FixIt<cr>
-map <C-h> :echo tsuquyomi#hint()<cr>
+
+" Provide a shortcut to open/close file browser
+nnoremap <C-n> :NERDTreeToggle<CR>
+
+" }}}
+
+" FINDING FILES: {{{
+
+" Recursive search
+" Provides tab-completion for all file-related tasks
+set path+=**
+
+" Display all matching files when we tab complete
+set wildmenu
+
+" NOW WE CAN:
+" - Hit tab to :find by partial match
+" - Use * to make it fuzzy
+
+" THINGS TO CONSIDER:
+" - :b lets you autocomplete any open buffer
+
+" }}}
+
+" TAG JUMPING: {{{
+
+" Create the `tags` file (may need to install ctags first)
+command! MakeTags !ctags -R .
+
+" NOW WE CAN:
+" - Use ^] to jump to tag under cursor
+" - Use g^] for ambiguous tags
+" - Use ^t to jump back up the tag stack
+
+" THINGS TO CONSIDER:
+" - This doesn't help if you want a visual list of tags
+
+" }}}
+
+" AUTOCOMPLETE: {{{
+
+" The good stuff in documented in |ins-completion|
+
+" HIGHLIGHTS:
+" - ^x^n for JUST this file
+" - ^x^f for filenames (works with our recursive path)
+" - ^x^] for tags only
+" - ^n for anything specified by the 'complete' option
+
+" NOW WE CAN:
+" - Use ^n and ^p to go back and forth in the suggestion list
+" - Use ^e to escape autocomplete
+
+" }}}
+
+" NODEJS: {{{
+
+" Ignore node_modules in tab-completion when working with files
+set wildignore+=*/node_modules/*
+
+" Ignore node_modules in NERDTree
+let g:NERDTreeIgnore = ['node_modules']
+
+" Use <TAB> for coc.nvim completion and navigate to next complete item
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+" Close preview window when completion is done.
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+
+" Jump to definition
+nmap <c-]> <Plug>(coc-definition)
+
+" Quick fix the current line
+nmap <c-i> <Plug>(coc-fix-current)
+
+" Jump to previous error
+nmap <c-j> <Plug>(coc-diagnostic-prev)
+
+" Jump to next error
+nmap <c-k> <Plug>(coc-diagnostic-next)
+
+" Trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" }}}
+
+" SNIPPETS: {{{
+
+" Create a snippet for a TypeScript error
+nnoremap <leader>err :read $HOME/.snippets/err.ts<CR>k"_dd2wi
+
+" THINGS TO CONSIDER:
+" - :read adds a newline, which we remove with k"_dd
+
+" }}}
