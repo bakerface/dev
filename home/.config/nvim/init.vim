@@ -5,14 +5,31 @@
 
 " }}}
 
+" PLUGINS: {{{
+call plug#begin('~/.vim/plugged')
+
+" Color Scheme
+Plug 'joshdick/onedark.vim'
+
+" Syntax Files
+Plug 'sheerun/vim-polyglot'
+
+" File browser
+Plug 'preservim/nerdtree'
+
+" Code completion
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+call plug#end()
+
+" }}}
+
 " BASIC SETUP: {{{
 syntax on
 filetype plugin indent on
 
-"set background=dark
-set background=light
-set t_Co=256
-
+colorscheme onedark
+set background=dark
 set hidden
 set foldmethod=marker
 set encoding=utf-8

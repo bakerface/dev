@@ -25,34 +25,22 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
 USER $USERNAME
 WORKDIR /home/$USERNAME
 ENV EDITOR=vim VISUAL=vim TERM=xterm-256color
-ENV NVIM_PACK /home/$USERNAME/.local/share/nvim/site/pack/
+COPY --chown=$UID:$UID home .
 
-RUN mkdir -p $NVIM_PACK/common/start \
-  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/scrooloose/nerdtree \
-  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/tpope/vim-fugitive \
-  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/tpope/vim-sensible \
-  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/vim-airline/vim-airline \
-  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/peitalin/vim-jsx-typescript \
-  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/othree/javascript-libraries-syntax.vim \
-  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/othree/yajs.vim \
-  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/HerringtonDarkholme/yats.vim \
-  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/mxw/vim-jsx \
-  && git -C "${NVIM_PACK}/common/start" clone --depth 1 https://github.com/neoclide/coc.nvim -b release \
-  && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash \
+  && curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 SHELL ["/bin/bash", "-l", "-i", "-c"]
 RUN source .bashrc \
   && nvm install node \
   && npm install -g prettier eslint typescript \
-  && vim '+CocInstall -sync coc-eslint coc-prettier coc-json coc-tsserver coc-html' +qall
-SHELL ["/bin/bash", "-l", "-c"]
-
-COPY --chown=$UID:$UID home .
-
-RUN chmod +x ~/.bin/* \
+  && vim '+PlugInstall' +qall \
+  && vim '+CocInstall -sync coc-eslint coc-prettier coc-json coc-tsserver coc-html' +qall \
+  && chmod +x ~/.bin/* \
   && echo '' >> ~/.bashrc \
   && echo 'export PATH="${PATH}:${HOME}/.bin"' >> ~/.bashrc \
   && git config --global user.name "$USER_FULLNAME" \
   && git config --global push.default simple \
   && git config --global credential.helper cache \
-  && git config --global user.useConfigOnly true \
+  && git config --global user.useConfigOnly true
+SHELL ["/bin/bash", "-l", "-c"]
