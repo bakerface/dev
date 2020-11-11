@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:20.04
 
 ARG UID=1000
 ARG USERNAME=bakerface
@@ -32,7 +32,7 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | b
 
 SHELL ["/bin/bash", "-l", "-i", "-c"]
 RUN source .bashrc \
-  && nvm install node \
+  && nvm install --lts \
   && npm install -g prettier eslint typescript \
   && vim '+PlugInstall' +qall \
   && vim '+CocInstall -sync coc-eslint coc-prettier coc-json coc-tsserver coc-html' +qall \
