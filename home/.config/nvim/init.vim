@@ -20,6 +20,9 @@ Plug 'preservim/nerdtree'
 " Code completion
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+" Code completion for C#
+Plug 'OmniSharp/omnisharp-vim'
+
 call plug#end()
 
 " }}}
@@ -158,6 +161,33 @@ function! s:show_documentation()
   endif
 endfunction
 
+" }}}
+
+" C#: {{{
+
+" Ignore output directories when performing code checks
+let g:OmniSharp_diagnostic_exclude_paths = [
+\ 'obj\\',
+\ '[Tt]emp\\',
+\ '\.nuget\\',
+\ '\<AssemblyAttributes\.cs\>',
+\ '\<AssemblyInfo\.cs\>'
+\]
+
+" Jump to definition
+autocmd FileType cs nmap <c-]> <Plug>(omnisharp_go_to_definition)
+
+" Auto add/remove usings
+autocmd FileType cs nmap <c-u> <Plug>(omnisharp_fix_usings)
+
+" Show documentation
+autocmd FileType cs nmap K <Plug>(omnisharp_documentation)
+
+" Auto-format code
+autocmd FileType cs nmap = <Plug>(omnisharp_code_format)
+
+" Check for errors after a save
+autocmd BufWritePost *.cs :OmniSharpGlobalCodeCheck
 " }}}
 
 " SNIPPETS: {{{
