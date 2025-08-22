@@ -9,10 +9,12 @@ if [ $? -ne 0 ]; then
   docker run --rm \
     --name dev \
     --privileged \
-    --net=host \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v $HOME/.docker:/home/bakerface/.docker \
     -v $HOME/.ssh:/home/bakerface/.ssh \
     -v $HOME:/home/bakerface/host \
+    -p 1234:1234 \
+    -p 3000:3000 \
+    -p 8080:8080 \
     -it bakerface/dev
 fi

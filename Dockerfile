@@ -6,7 +6,7 @@ ARG DISPLAY_NAME="Chris Baker"
 ARG TZ="America/Kentucky/Louisville"
 ARG DOCKER_VERSION="28.3.3"
 ARG NVM_VERSION="0.35.3"
-ARG APT_PACKAGES="autoconf build-essential cmake curl git gforth iputils-ping make net-tools openssh-client python3-dev sudo telnet tree tzdata unzip neovim zip"
+ARG APT_PACKAGES="autoconf build-essential cmake curl git gforth htop iputils-ping make net-tools openssh-client python3-dev sudo telnet tree tzdata unzip neovim zip"
 ARG NPM_PACKAGES="prettier eslint typescript"
 ARG COC_PLUGINS="coc-eslint coc-prettier coc-json coc-tsserver coc-html"
 
