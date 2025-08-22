@@ -3,7 +3,7 @@
 docker exec \
   -e COLUMNS=$(tput cols) \
   -e LINES=$(tput lines) \
-  -it dev bash &>/dev/null
+  -it dev bash 2>/dev/null
 
 if [ $? -ne 0 ]; then
   docker run --rm \
