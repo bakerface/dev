@@ -3,32 +3,38 @@
 const child_process = require("child_process");
 
 // adb shell dumpsys window
-main(1080, 2400, +process.argv[2]);
+main(1080, 2400).catch((err) => {
+  console.error("error:", err.message);
+  process.exit(1);
+});
 
-async function main(width, height, times = 1) {
-  for (let i = 0, ii = times || 1; i < ii; i++) {
+async function main(width, height) {
+  const times = randomBetween(3, 5);
+
+  for (let i = 0; i < times; i++) {
     await swipeRandom(
       width / 4,
       height / 2,
       (3 * width) / 4,
       height / 2,
-      width / 8,
+      width / 16,
+      randomBetween(100, 200),
     );
 
-    await sleep(randomBetween(20, 50));
+    await sleep(randomBetween(50, 100));
   }
 }
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function swipeRandom(fx, fy, tx, ty, r) {
+function swipeRandom(fx, fy, tx, ty, r, ms) {
   const from = randomPoint(fx, fy, r, r);
   const to = randomPoint(tx, ty, r, r);
-  return swipeExact(from.x, from.y, to.x, to.y);
+  return swipeExact(from.x, from.y, to.x, to.y, ms);
 }
 
-function swipeExact(fx, fy, tx, ty) {
-  return adb("shell", "input", "swipe", fx, fy, tx, ty);
+function swipeExact(fx, fy, tx, ty, ms) {
+  return adb("shell", "input", "swipe", fx, fy, tx, ty, ms);
 }
 
 function adb(...args) {
@@ -39,7 +45,9 @@ function adb(...args) {
 
     proc.on("data", (data) => process.stdout.write(data));
     proc.on("error", reject);
-    proc.on("exit", (code) => (code ? reject(code) : resolve()));
+    proc.on("exit", (code) =>
+      code ? reject(new Error("the adb exited with code " + code)) : resolve(),
+    );
   });
 }
 
