@@ -12,7 +12,8 @@ ARG COC_PLUGINS="@yaegassy/coc-tailwindcss3 coc-clangd coc-eslint coc-html coc-j
 
 ENV TZ=${TZ}
 
-RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime \
+RUN yes | unminimize \
+  && ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime \
   && echo ${TZ} > /etc/timezone \
   && apt-get update \
   && apt-get install -y ${APT_PACKAGES} \
