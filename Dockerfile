@@ -6,7 +6,7 @@ ARG DISPLAY_NAME="Chris Baker"
 ARG TZ="America/Kentucky/Louisville"
 ARG DOCKER_VERSION="28.3.3"
 ARG NVM_VERSION="0.35.3"
-ARG APT_PACKAGES="autoconf build-essential clangd cmake curl git gforth htop iputils-ping make man-db net-tools openssh-client python3-dev sudo telnet tree tzdata unzip neovim zip"
+ARG APT_PACKAGES="adb autoconf build-essential clangd cmake curl git gforth htop iputils-ping make man-db net-tools openssh-client python3-dev sudo telnet tree tzdata unzip neovim zip"
 ARG NPM_PACKAGES="eslint prettier typescript"
 ARG COC_PLUGINS="@yaegassy/coc-tailwindcss3 coc-clangd coc-eslint coc-html coc-json coc-prettier coc-tsserver"
 
@@ -15,8 +15,8 @@ ENV TZ=${TZ}
 RUN yes | unminimize \
   && ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime \
   && echo ${TZ} > /etc/timezone \
-  && apt-get update \
-  && apt-get install -y ${APT_PACKAGES} \
+  && apt update \
+  && apt install -y ${APT_PACKAGES} \
   && curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz | sudo tar --strip-components=1 -C /usr/local/bin -xz \
   && curl -fLo /usr/local/bin/dind "https://raw.githubusercontent.com/moby/moby/refs/tags/v${DOCKER_VERSION}/hack/dind" \
   && chmod +x /usr/local/bin/dind \
@@ -26,7 +26,7 @@ RUN yes | unminimize \
   && chmod 440 /etc/sudoers.d/${USERNAME} \
   && addgroup docker \
   && usermod -aG docker ${USERNAME} \
-  && apt-get clean \
+  && apt clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 USER ${USERNAME}
