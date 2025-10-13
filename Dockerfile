@@ -5,9 +5,9 @@ ARG USERNAME="bakerface"
 ARG DISPLAY_NAME="Chris Baker"
 ARG TZ="America/Kentucky/Louisville"
 ARG DOCKER_VERSION="28.3.3"
-ARG NVM_VERSION="0.35.3"
+ARG NVM_VERSION="0.40.3"
 ARG APT_PACKAGES="adb autoconf build-essential clangd cmake curl git gforth htop iputils-ping make man-db net-tools openssh-client python3-dev sudo telnet tree tzdata unzip neovim zip"
-ARG NPM_PACKAGES="eslint prettier typescript"
+ARG NPM_PACKAGES="eslint prettier tsx typescript"
 ARG COC_PLUGINS="@yaegassy/coc-tailwindcss3 coc-clangd coc-eslint coc-html coc-json coc-prettier coc-tsserver"
 
 ENV TZ=${TZ}
